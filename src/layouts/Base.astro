@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import { link } from '../lib/url';
+
+interface Props {
+  tytul: string;
+  opis?: string;
+}
+const { tytul, opis } = Astro.props;
+const rok = 2026; // ponytail: stały rok w stopce — podmień ręcznie raz w roku
+const nawigacja = [
+  { href: link('/'), etykieta: 'Pracownia' },
+  { href: link('/katalog'), etykieta: 'Katalog' },
+];
+// pathname pod Pages zawiera base i bywa z końcowym „/” — porównuj bez niego.
+const tu = Astro.url.pathname.replace(/\/$/, '');
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tytul} — Michalina Stopnicka Art</title>
+    {opis && <meta name="description" content={opis} />}
+    <link rel="icon" href={link('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="border-b border-popiol/25">
+      <div class="mx-auto max-w-5xl px-5 py-5 flex items-baseline justify-between gap-6">
+        <a href={link('/')} class="display text-lg text-atrament no-underline">Michalina Stopnicka</a>
+        <nav aria-label="Główna">
+          <ul class="flex gap-6 list-none m-0 p-0">
+            {
+              nawigacja.map((n) => (
+                <li>
+                  <a
+                    href={n.href}
+                    class="display text-xs text-popiol hover:text-glina no-underline transition-colors"
+                    aria-current={tu === n.href.replace(/\/$/, '') ? 'page' : undefined}
+                  >
+                    {n.etykieta}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="border-t border-popiol/25 mt-16">
+      <div class="mx-auto max-w-5xl px-5 py-8 text-sm text-popiol flex flex-wrap justify-between gap-3">
+        <span>Michalina Stopnicka · ceramika</span>
+        <span>© {rok}</span>
+      </div>
+    </footer>
+  </body>
+</html>

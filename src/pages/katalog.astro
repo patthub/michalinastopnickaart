@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import KartaProduktu from '../components/KartaProduktu.astro';
+
+const produkty = (await getCollection('produkty')).sort(
+  (a, b) => a.data.kolejnosc - b.data.kolejnosc
+);
+
+const etykietyKategorii: Record<string, string> = {
+  naczynia: 'Naczynia',
+  wazony: 'Wazony',
+  rzezba: 'Rzeźba',
+  kafle: 'Kafle',
+};
+// Tylko kategorie, które faktycznie występują.
+const obecne = [...new Set(produkty.map((p) => p.data.kategoria))];
+const filtry = [
+  { klucz: 'wszystko', etykieta: 'Wszystko' },
+  ...obecne.map((k) => ({ klucz: k, etykieta: etykietyKategorii[k] })),
+];
+---
+
+<Base tytul="Katalog" opis="Katalog wyrobów pracowni Ziarno — naczynia, wazony, rzeźba, kafle.">
+  <section class="mx-auto max-w-5xl px-5 pt-12 pb-16">
+    <h1 class="display text-3xl m-0">Katalog</h1>
+
+    <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filtruj po kategorii">
+      {
+        filtry.map((f, i) => (
+          <button
+            type="button"
+            data-filtr={f.klucz}
+            class="display text-xs px-3.5 py-2 border border-popiol/40 text-popiol hover:text-atrament hover:border-atrament transition-colors aria-pressed:bg-atrament aria-pressed:text-tlo aria-pressed:border-atrament"
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >
+            {f.etykieta}
+          </button>
+        ))
+      }
+    </div>
+
+    <div id="siatka" class="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      {
+        produkty.map((p) => (
+          <div data-kategoria={p.data.kategoria}>
+            <KartaProduktu produkt={p} />
+          </div>
+        ))
+      }
+    </div>
+    <p id="pusto" hidden class="mt-10 text-popiol">Brak wyrobów w tej kategorii.</p>
+  </section>
+</Base>
+
+<script>
+  // Filtrowanie po kategorii — czysty DOM, bez frameworka. Bez JS: widać wszystko.
+  const przyciski = document.querySelectorAll<HTMLButtonElement>('[data-filtr]');
+  const karty = document.querySelectorAll<HTMLElement>('#siatka [data-kategoria]');
+  const pusto = document.getElementById('pusto')!;
+
+  function filtruj(klucz: string) {
+    let widoczne = 0;
+    karty.forEach((k) => {
+      const pokaz = klucz === 'wszystko' || k.dataset.kategoria === klucz;
+      k.hidden = !pokaz;
+      if (pokaz) widoczne++;
+    });
+    pusto.hidden = widoczne > 0;
+  }
+
+  przyciski.forEach((b) =>
+    b.addEventListener('click', () => {
+      przyciski.forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      filtruj(b.dataset.filtr!);
+    })
+  );
+</script>

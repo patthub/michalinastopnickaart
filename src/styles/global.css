@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+/* Tokeny — świat szkliw i wypału. Podmień hex-y pod własną pracownię. */
+@theme {
+  --color-tlo: #f4f1ea; /* kremowe tło */
+  --color-kosc: #ece5d6; /* kość — jaśniejsze płaszczyzny */
+  --color-glina: #b5623c; /* glina surowa / terakota — akcent */
+  --color-kobalt: #26386b; /* kobalt — akcent chłodny */
+  --color-popiol: #6f6d64; /* popiół — tekst drugorzędny, linie */
+  --color-atrament: #1c1b18; /* atrament — tekst główny */
+
+  /* ponytail: system fonts zamiast web-fontów — brak zewn. pobrań na GitHub Pages.
+     Chcesz wąski szeryf display (np. Cormorant/Fraunces)? Podmień --font-display. */
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-body: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  body {
+    background: var(--color-tlo);
+    color: var(--color-atrament);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Widoczny focus klawiatury (wymóg bazowy). */
+  :focus-visible {
+    outline: 2px solid var(--color-kobalt);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Nagłówki display: wąski szeryf, wersaliki, szerokie odstępy. */
+  .display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 500;
+  }
+  /* Sygnaturowy wycięty narożnik karty. */
+  .naroznik {
+    clip-path: polygon(0 0, calc(100% - 1.4rem) 0, 100% 1.4rem, 100% 100%, 0 100%);
+  }
+  /* Włoskowe linie broadsheet między metrykami. */
+  .metryki dt {
+    color: var(--color-popiol);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+  }
+}
+
+/* Respektuj prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

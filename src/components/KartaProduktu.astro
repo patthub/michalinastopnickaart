@@ -1,0 +1,34 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { link } from '../lib/url';
+
+interface Props {
+  produkt: CollectionEntry<'produkty'>;
+}
+const { produkt } = Astro.props;
+const { nazwa, skrot, zdjecia, glina, dostepny } = produkt.data;
+---
+
+<a
+  href={link(`/produkty/${produkt.id}`)}
+  class="naroznik group block bg-kosc border border-popiol/20 no-underline text-atrament hover:border-glina transition-colors"
+>
+  <div class="aspect-[4/5] overflow-hidden bg-tlo">
+    <img
+      src={link(zdjecia[0])}
+      alt={nazwa}
+      loading="lazy"
+      width="480"
+      height="600"
+      class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform"
+    />
+  </div>
+  <div class="p-4">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="display text-base m-0">{nazwa}</h3>
+      {!dostepny && <span class="text-xs text-popiol shrink-0">niedostępne</span>}
+    </div>
+    <p class="mt-1.5 mb-0 text-sm text-popiol">{skrot}</p>
+    {glina && <p class="mt-2 mb-0 text-xs text-popiol/80">{glina}</p>}
+  </div>
+</a>

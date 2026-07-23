@@ -1,0 +1,31 @@
+---
+// Metryki wyrobu — podpis jak przy pracy na wystawie. Renderuje tylko wypełnione pola.
+interface Props {
+  glina?: string;
+  szkliwo?: string;
+  wypal?: string;
+  wymiary?: string;
+  rok?: number;
+}
+const { glina, szkliwo, wypal, wymiary, rok } = Astro.props;
+const wiersze = [
+  ['Glina', glina],
+  ['Szkliwo', szkliwo],
+  ['Wypał', wypal],
+  ['Wymiary', wymiary],
+  ['Rok', rok?.toString()],
+].filter(([, v]) => v) as [string, string][];
+---
+
+{
+  wiersze.length > 0 && (
+    <dl class="metryki grid grid-cols-[auto_1fr] gap-x-6 gap-y-0 m-0">
+      {wiersze.map(([k, v]) => (
+        <div class="contents">
+          <dt class="py-2.5 border-t border-popiol/20 self-center">{k}</dt>
+          <dd class="py-2.5 border-t border-popiol/20 m-0 text-atrament">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}

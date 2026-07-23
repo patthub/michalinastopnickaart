@@ -1,0 +1,93 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import TabelaMetryk from '../../components/TabelaMetryk.astro';
+import { link } from '../../lib/url';
+
+export async function getStaticPaths() {
+  const produkty = await getCollection('produkty');
+  return produkty.map((p) => ({ params: { slug: p.id }, props: { produkt: p } }));
+}
+
+const { produkt } = Astro.props;
+const { nazwa, skrot, zdjecia, kategoria, dostepny, linki } = produkt.data;
+const { Content } = await render(produkt);
+
+const etykietyKategorii: Record<string, string> = {
+  naczynia: 'Naczynia',
+  wazony: 'Wazony',
+  rzezba: 'Rzeźba',
+  kafle: 'Kafle',
+};
+---
+
+<Base tytul={nazwa} opis={skrot}>
+  <article class="mx-auto max-w-5xl px-5 pt-8 pb-16">
+    <a href={link('/katalog')} class="display text-xs text-glina no-underline">← Katalog</a>
+
+    <div class="mt-6 grid gap-10 md:grid-cols-2 md:items-start">
+      <!-- Galeria: główne zdjęcie + reszta w siatce. Bez JS działa w całości. -->
+      <div class="grid gap-3">
+        <div class="naroznik overflow-hidden bg-kosc border border-popiol/20">
+          <img
+            src={link(zdjecia[0])}
+            alt={nazwa}
+            width="640"
+            height="800"
+            class="w-full object-cover"
+          />
+        </div>
+        {
+          zdjecia.length > 1 && (
+            <div class="grid grid-cols-3 gap-3">
+              {zdjecia.slice(1).map((z, i) => (
+                <div class="overflow-hidden bg-kosc border border-popiol/20">
+                  <img
+                    src={link(z)}
+                    alt={`${nazwa} — ujęcie ${i + 2}`}
+                    loading="lazy"
+                    width="200"
+                    height="200"
+                    class="w-full aspect-square object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      <div>
+        <p class="display text-xs text-glina mb-3">{etykietyKategorii[kategoria]}</p>
+        <h1 class="display text-3xl md:text-4xl m-0">{nazwa}</h1>
+        <p class="mt-4 text-lg text-popiol">{skrot}</p>
+        {!dostepny && <p class="mt-2 text-sm text-popiol">Aktualnie niedostępne</p>}
+
+        <div class="prose prose-sm max-w-none mt-6 text-atrament [&_p]:my-3 [&_p]:leading-relaxed">
+          <Content />
+        </div>
+
+        <div class="mt-8">
+          <TabelaMetryk {...produkt.data} />
+        </div>
+
+        {
+          linki.length > 0 && (
+            <ul class="mt-8 flex flex-wrap gap-3 list-none p-0 m-0">
+              {linki.map((l) => (
+                <li>
+                  <a
+                    href={l.url}
+                    class="display text-xs inline-block px-4 py-2.5 border border-atrament text-atrament no-underline hover:bg-atrament hover:text-tlo transition-colors"
+                  >
+                    {l.etykieta}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+  </article>
+</Base>
