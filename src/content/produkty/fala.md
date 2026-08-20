@@ -1,5 +1,5 @@
 ---
-nazwa: Kafel „Fala"
+nazwa: Kafel „Dupa"
 skrot: Kafel dekoracyjny z reliefem fali, sprzedawany pojedynczo lub w zestawie.
 zdjecia:
   - /img/produkty/fala-1.svg
