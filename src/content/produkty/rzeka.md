@@ -1,5 +1,5 @@
 ---
-nazwa: Dzban „Rzeka"
+nazwa: Dzban „kevin kaczor"
 skrot: Dzban z wylewem i uchem, terakotowy akcent na szyjce.
 zdjecia:
   - /img/produkty/rzeka-1.svg
@@ -10,7 +10,7 @@ wypal: 1240°C, utlenianie
 wymiary: wys. 26 cm, poj. 1,2 l
 rok: 2026
 kategoria: wazony
-kolejnosc: 6
+kolejnosc: 69
 dostepny: true
 linki:
   - etykieta: Napisz w sprawie
