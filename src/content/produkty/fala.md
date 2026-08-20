@@ -1,5 +1,5 @@
 ---
-nazwa: Kafel „Dupa"
+nazwa: Kafel „dupa kevina"
 skrot: Kafel dekoracyjny z reliefem fali, sprzedawany pojedynczo lub w zestawie.
 zdjecia:
   - /img/produkty/fala-1.svg
@@ -10,7 +10,7 @@ wypal: 1240°C, redukcja
 wymiary: 15 × 15 × 1,2 cm
 rok: 2026
 kategoria: kafle
-kolejnosc: 4
+kolejnosc: 70
 dostepny: true
 linki:
   - etykieta: Zapytaj o zestaw
